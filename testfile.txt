@@ -1,0 +1,51 @@
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+void quicksort(vector<int>& arr, int low, int high) {
+    if (low < high) {
+        int pivot = arr[high];
+        int i = low - 1;
+        for (int j = low; j <= high - 1; j++) {
+            if (arr[j] < pivot) {
+                i++;
+                swap(arr[i], arr[j]);
+            }
+        }
+        swap(arr[i + 1], arr[high]);
+        int pi = i + 1;
+        quicksort(arr, low, pi - 1);
+        quicksort(arr, pi + 1, high);
+    }
+}
+
+int main() {
+    int size;
+    cout << "Enter Size of String Vector: ";
+    cin >> size;
+
+    vector<string> names(size);
+
+    cout << "Enter your strings:" << endl;
+    for (int i = 0; i < size; i++) {
+        cin >> names[i];
+    }
+
+    vector<int> lengths(size);
+    for (int i = 0; i < size; i++) {
+        lengths[i] = names[i].length() * 41;
+    }
+
+    for (int i = 0; i < size; i++) {
+        cout <<"Your strings are "<<names[i] <<endl;
+    }
+    quicksort(lengths, 0, size - 1);
+
+    for (int i = 0; i < size; i++) {
+        cout << lengths[i] << " ";
+    }
+    cout << endl;
+
+    return 0;
+}
