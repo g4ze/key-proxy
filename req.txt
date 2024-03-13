@@ -1,2 +1,4 @@
 pyautogui
 pyperclip
+kivy
+plyer

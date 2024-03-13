@@ -1,1 +1,3 @@
-testfile.txt
+src/testfile.txt
+ket-pr
+src/__pycache__
