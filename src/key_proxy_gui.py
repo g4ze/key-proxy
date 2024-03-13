@@ -16,7 +16,7 @@ class MyBoxLayout(BoxLayout):
 
         # Widget for support link
         self.support_widget = Button(
-            text="WELCOME! Reach developer by clicking here![/ref]",
+            text="WELCOME! Reach developer by clicking here!",
             size_hint=(1, 0.1),
             background_color=(0.5, 0.5, 0.5, 1),
             color=(1, 1, 1, 1),
