@@ -5,5 +5,4 @@ install and run `key-proxy` :
 
 ```
 pip install key-proxy=2.0.0
-
 ```
