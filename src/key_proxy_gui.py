@@ -1,3 +1,4 @@
+import os
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
@@ -13,19 +14,23 @@ class MyBoxLayout(BoxLayout):
         super(MyBoxLayout, self).__init__(**kwargs)
         self.orientation = "vertical"
         self.text_input = TextInput(
-            hint_text="Paste your text here:", size_hint=(1, 0.8),
+            hint_text="Paste your text here:",
+            size_hint=(1, 0.8),
             background_color=(0, 0, 0, 1),
-            foreground_color=(1, 1, 1, 1)
+            foreground_color=(1, 1, 1, 1),
         )
         self.add_widget(self.text_input)
         self.countdown_input = TextInput(
-            hint_text="Enter countdown duration (in seconds):", size_hint=(1, 0.1),
+            hint_text="Enter countdown duration (in seconds):",
+            size_hint=(1, 0.1),
             background_color=(0, 0, 0, 1),
             foreground_color=(1, 1, 1, 1),
-            )
+        )
         self.add_widget(self.countdown_input)
 
-        self.button_execute = Button(text="Start", size_hint=(1, 0.1), background_color=(0, 2, 0, 2))
+        self.button_execute = Button(
+            text="Start", size_hint=(1, 0.1), background_color=(0, 2, 0, 2)
+        )
         self.button_execute.bind(on_press=self.start_execution)
         self.add_widget(self.button_execute)
 
@@ -33,16 +38,22 @@ class MyBoxLayout(BoxLayout):
         text = self.text_input.text
         if not self.countdown_input.text or not self.countdown_input.text.isdigit():
             self.countdown_input.text = "5"
-        # Save the text to a file
-        with open("src/output.txt", "w") as file:
-            file.write(text)
 
-        print("Text saved to output.txt")
-        
+        # Save the text to a file
+        file_path = os.path.join(os.getcwd(), "output.txt")
+        try:
+            with open(file_path, "w") as file:
+                file.write(text)
+            print("Text saved to output.txt")
+        except Exception as e:
+            print(f"Error saving text to file: {e}")
+
         self.show_countdown()
 
     def show_countdown(self):
-        self.countdown_view = ModalView(size_hint=(0.5, 0.3), size_hint_max_x=400, size_hint_max_y=100)
+        self.countdown_view = ModalView(
+            size_hint=(0.5, 0.3), size_hint_max_x=400, size_hint_max_y=100
+        )
         self.countdown_label = Label(
             text=f"Starting in {int(self.countdown_input.text)}s", font_size=20
         )
@@ -64,20 +75,24 @@ class MyBoxLayout(BoxLayout):
             self.execute_script()
 
     def execute_script(self):
-        from starter import Starter
         print("Starting the script...")
-        starter = Starter(file_path="src/output.txt", delay=0)
-        starter.start()
-        print("Script execution completed!")
-        self.show_success_popup()
+        try:
+            start = KeyProxy(
+                file_path="output.txt", delay=int(self.countdown_input.text)
+            )
+            start.type_text_from_file()
+            print("Script execution completed!")
+            self.show_success_popup()
+        except Exception as e:
+            print(f"Error executing script: {e}")
+
     def show_success_popup(self):
-        self.success_view = ModalView(size_hint=(0.7, 0.3), size_hint_max_x=400, size_hint_max_y=100)
-        self.success_label = Label(
-            text="Script execution completed!", font_size=20
+        self.success_view = ModalView(
+            size_hint=(0.7, 0.3), size_hint_max_x=400, size_hint_max_y=100
         )
+        self.success_label = Label(text="Script execution completed!", font_size=20)
         self.success_view.add_widget(self.success_label)
         self.success_view.open()
-
 
 
 class MyApp(App):
@@ -87,5 +102,42 @@ class MyApp(App):
         return MyBoxLayout()
 
 
+import pyautogui
+import time
+import pyperclip
 
-    
+
+class KeyProxy:
+    def __init__(self, file_path, delay=5):
+        self.file_path = file_path
+        self.delay = delay
+
+    def type_text_from_file(self):
+
+        with open(self.file_path, "r", encoding="utf-8") as file:
+            lines = file.readlines()
+        print("reading file...")
+
+        # Delay before starting typing
+        time.sleep(self.delay)
+
+        for line in lines:
+            for char in line.strip():
+                if char == "<":
+                    # Use pyperclip to paste '<' symbol from the clipboard
+                    pyperclip.copy("<")
+                    pyautogui.hotkey("shift", ",")
+                if char == "#":
+                    # Use pyperclip to paste '#' symbol from the clipboard
+                    pyperclip.copy("#")
+                    pyautogui.hotkey("shift", "3")
+                else:
+                    pyautogui.write(char)
+
+                time.sleep(0.1)  # Adjust this delay as needed
+
+            pyautogui.press("enter")  # Press 'Enter' at the end of each line
+
+
+if __name__ == "__main__":
+    MyApp().run()

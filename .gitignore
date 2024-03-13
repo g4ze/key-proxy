@@ -1,3 +1,7 @@
 src/testfile.txt
 ket-pr
 src/__pycache__
+dist
+build
+__pycache__
+key_proxy.egg-info
