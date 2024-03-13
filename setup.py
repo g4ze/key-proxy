@@ -4,7 +4,7 @@ with open("req.txt") as f:
     requirements = f.read().splitlines()
 setup(
     name="key-proxy",
-    version="1.2.5",
+    version="2.0.0",
     packages=find_packages(),
     install_requires=requirements,
     python_requires=">=3.7",

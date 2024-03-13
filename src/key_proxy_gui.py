@@ -13,6 +13,18 @@ class MyBoxLayout(BoxLayout):
     def __init__(self, **kwargs):
         super(MyBoxLayout, self).__init__(**kwargs)
         self.orientation = "vertical"
+
+        # Widget for support link
+        self.support_widget = Button(
+            text="WELCOME! Reach developer by clicking here![/ref]",
+            size_hint=(1, 0.1),
+            background_color=(0.5, 0.5, 0.5, 1),
+            color=(1, 1, 1, 1),
+        )
+        self.support_widget.bind(on_press=self.open_support_link)
+
+        self.add_widget(self.support_widget)
+
         self.text_input = TextInput(
             hint_text="Paste your text here:",
             size_hint=(1, 0.8),
@@ -93,6 +105,12 @@ class MyBoxLayout(BoxLayout):
         self.success_label = Label(text="Script execution completed!", font_size=20)
         self.success_view.add_widget(self.success_label)
         self.success_view.open()
+
+    def open_support_link(self, instance):
+        import webbrowser
+
+        print("Opening support link...")
+        webbrowser.open("https://github.com/g4ze/key-proxy")
 
 
 class MyApp(App):
