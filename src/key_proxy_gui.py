@@ -12,39 +12,54 @@ from kivy.uix.modalview import ModalView
 class MyBoxLayout(BoxLayout):
     def __init__(self, **kwargs):
         super(MyBoxLayout, self).__init__(**kwargs)
-        self.orientation = "vertical"
+        self.orientation = "horizontal"
 
-        # Widget for support link
-        self.support_widget = Button(
-            text="WELCOME! Reach developer by clicking here!",
-            size_hint=(1, 0.1),
-            background_color=(0.5, 0.5, 0.5, 1),
-            color=(1, 1, 1, 1),
-        )
-        self.support_widget.bind(on_press=self.open_support_link)
+        # Left box for text input
+        left_box = BoxLayout(orientation="vertical")
 
-        self.add_widget(self.support_widget)
-
+       
         self.text_input = TextInput(
             hint_text="Paste your text here:",
             size_hint=(1, 0.8),
             background_color=(0, 0, 0, 1),
             foreground_color=(1, 1, 1, 1),
         )
-        self.add_widget(self.text_input)
+        left_box.add_widget(self.text_input)
+
+        self.add_widget(left_box)
+
+        # Right box for buttons
+        right_box = BoxLayout(orientation="vertical")
+         # Widget for support link
+        self.support_widget = Button(
+            text="WELCOME! Reach developer by clicking here!",
+             size_hint=(1, 0.1), size_hint_max_x=400, size_hint_max_y=100,
+            background_color=(0.5, 0.5, 0.5, 1),
+            color=(1, 1, 1, 1),
+        )
+        self.support_widget.bind(on_press=self.open_support_link)
+        right_box.add_widget(self.support_widget)
+
+
         self.countdown_input = TextInput(
             hint_text="Enter countdown duration (in seconds):",
             size_hint=(1, 0.1),
             background_color=(0, 0, 0, 1),
             foreground_color=(1, 1, 1, 1),
         )
-        self.add_widget(self.countdown_input)
+        right_box.add_widget(self.countdown_input)
 
         self.button_execute = Button(
-            text="Start", size_hint=(1, 0.1), background_color=(0, 2, 0, 2)
+            text="Start", size_hint=(1, 0.1), size_hint_max_x=400, size_hint_max_y=100,
+            background_color=(0, 2, 0, 2)
         )
         self.button_execute.bind(on_press=self.start_execution)
-        self.add_widget(self.button_execute)
+        right_box.add_widget(self.button_execute)
+
+        self.add_widget(right_box)
+
+        
+
 
     def start_execution(self, instance):
         text = self.text_input.text
