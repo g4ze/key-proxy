@@ -4,5 +4,5 @@ A minimalistic approach on implementing an auto-typer. It's free and ready to us
 install and run `key-proxy` :
 
 ```
-pip install key-proxy=2.0.0
+pip install key-proxys
 ```
